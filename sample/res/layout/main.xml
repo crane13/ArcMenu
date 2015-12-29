@@ -7,25 +7,27 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <com.capricorn.RayMenu
             android:id="@+id/ray_menu"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
+            android:visibility="gone"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"/>
 
         <com.capricorn.ArcMenu
             android:id="@+id/arc_menu"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <com.capricorn.ArcMenu
             android:id="@+id/arc_menu_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             arc:fromDegrees="@dimen/menuFromDegrees"
             arc:toDegrees="@dimen/menuToDegrees"
             arc:childSize="@dimen/menuChildSize"/>

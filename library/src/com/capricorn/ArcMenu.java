@@ -44,6 +44,8 @@ public class ArcMenu extends RelativeLayout {
     private ArcLayout mArcLayout;
 
     private ImageView mHintView;
+    
+    private View bg;
 
     public ArcMenu(Context context) {
         super(context);
@@ -61,6 +63,8 @@ public class ArcMenu extends RelativeLayout {
         li.inflate(R.layout.arc_menu, this);
 
         mArcLayout = (ArcLayout) findViewById(R.id.item_layout);
+        
+        bg = findViewById(R.id.bg);
 
         final ViewGroup controlLayout = (ViewGroup) findViewById(R.id.control_layout);
         controlLayout.setClickable(true);
@@ -70,6 +74,7 @@ public class ArcMenu extends RelativeLayout {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     mHintView.startAnimation(createHintSwitchAnimation(mArcLayout.isExpanded()));
+                    bg.startAnimation(createBgAlphaAnimation(mArcLayout.isExpanded()));
                     mArcLayout.switchState(true);
                 }
 
@@ -141,6 +146,7 @@ public class ArcMenu extends RelativeLayout {
 
                 mArcLayout.invalidate();
                 mHintView.startAnimation(createHintSwitchAnimation(true));
+                bg.startAnimation(createBgAlphaAnimation(mArcLayout.isExpanded()));
 
                 if (listener != null) {
                     listener.onClick(viewClicked);
@@ -184,6 +190,18 @@ public class ArcMenu extends RelativeLayout {
                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setStartOffset(0);
         animation.setDuration(100);
+        animation.setInterpolator(new DecelerateInterpolator());
+        animation.setFillAfter(true);
+
+        return animation;
+    }
+    
+    private static Animation createBgAlphaAnimation(final boolean expanded) {
+    	float alphaStart = expanded ? 1.f : 0.f;
+    	float alphaStop = expanded ? 0.f : 1.f;
+        Animation animation = new AlphaAnimation(alphaStart,alphaStop);
+        animation.setStartOffset(0);
+        animation.setDuration(500);
         animation.setInterpolator(new DecelerateInterpolator());
         animation.setFillAfter(true);
 

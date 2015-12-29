@@ -34,7 +34,8 @@ import com.capricorn.RayMenu;
 public class MainActivity extends Activity {
 	private static final int[] ITEM_DRAWABLES = { R.drawable.composer_camera, R.drawable.composer_music,
 			R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.composer_thought, R.drawable.composer_with };
-
+	private static final int[] ITEM_DRAWABLES_ = { R.drawable.home_icon_pop_shang, R.drawable.home_icon_pop_tiezi,
+			R.drawable.home_icon_pop_meitu, R.drawable.home_icon_pop_ceshi };
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class MainActivity extends Activity {
         ArcMenu arcMenu2 = (ArcMenu) findViewById(R.id.arc_menu_2);
 
         initArcMenu(arcMenu, ITEM_DRAWABLES);
-        initArcMenu(arcMenu2, ITEM_DRAWABLES);
+        initArcMenu(arcMenu2, ITEM_DRAWABLES_);
 
 		RayMenu rayMenu = (RayMenu) findViewById(R.id.ray_menu);
         final int itemCount = ITEM_DRAWABLES.length;

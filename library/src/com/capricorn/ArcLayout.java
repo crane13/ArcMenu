@@ -46,7 +46,7 @@ public class ArcLayout extends ViewGroup {
      */
     private int mChildSize;
 
-    private int mChildPadding = 5;
+    private int mChildPadding = 50;
 
     private int mLayoutPadding = 10;
 
@@ -58,12 +58,16 @@ public class ArcLayout extends ViewGroup {
 
     private float mToDegrees = DEFAULT_TO_DEGREES;
 
-    private static final int MIN_RADIUS = 100;
+    private static final int MIN_RADIUS = 200;
 
     /* the distance between the layout's center and any child's center */
     private int mRadius;
 
     private boolean mExpanded = false;
+    
+    private int screenW;
+    
+    private int screenH;
 
     public ArcLayout(Context context) {
         super(context);
@@ -80,6 +84,8 @@ public class ArcLayout extends ViewGroup {
 
             a.recycle();
         }
+        screenW = getResources().getDisplayMetrics().widthPixels;
+        screenH = getResources().getDisplayMetrics().heightPixels;
     }
 
     private static int computeRadius(final float arcDegrees, final int childCount, final int childSize,
@@ -111,10 +117,10 @@ public class ArcLayout extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int radius = mRadius = computeRadius(Math.abs(mToDegrees - mFromDegrees), getChildCount(), mChildSize,
                 mChildPadding, MIN_RADIUS);
-        final int size = radius * 2 + mChildSize + mChildPadding + mLayoutPadding * 2;
+//        final int size = radius * 2 + mChildSize + mChildPadding + mLayoutPadding * 2;
 
-        setMeasuredDimension(size, size);
-
+        setMeasuredDimension(screenW, screenH);
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             getChildAt(i).measure(MeasureSpec.makeMeasureSpec(mChildSize, MeasureSpec.EXACTLY),
@@ -125,7 +131,7 @@ public class ArcLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         final int centerX = getWidth() / 2;
-        final int centerY = getHeight() / 2;
+        final int centerY = getCenterY();
         final int radius = mExpanded ? mRadius : 0;
 
         final int childCount = getChildCount();
@@ -164,7 +170,7 @@ public class ArcLayout extends ViewGroup {
 
     private static Animation createExpandAnimation(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta,
             long startOffset, long duration, Interpolator interpolator) {
-        Animation animation = new RotateAndTranslateAnimation(0, toXDelta, 0, toYDelta, 0, 720);
+        Animation animation = new RotateAndTranslateAnimation(0, toXDelta, 0, toYDelta, 0, 0);
         animation.setStartOffset(startOffset);
         animation.setDuration(duration);
         animation.setInterpolator(interpolator);
@@ -179,7 +185,7 @@ public class ArcLayout extends ViewGroup {
         animationSet.setFillAfter(true);
 
         final long preDuration = duration / 2;
-        Animation rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f,
+        Animation rotateAnimation = new RotateAnimation(0, 0, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setStartOffset(startOffset);
         rotateAnimation.setDuration(preDuration);
@@ -188,7 +194,7 @@ public class ArcLayout extends ViewGroup {
 
         animationSet.addAnimation(rotateAnimation);
 
-        Animation translateAnimation = new RotateAndTranslateAnimation(0, toXDelta, 0, toYDelta, 360, 720);
+        Animation translateAnimation = new RotateAndTranslateAnimation(0, toXDelta, 0, toYDelta, 0, 0);
         translateAnimation.setStartOffset(startOffset + preDuration);
         translateAnimation.setDuration(duration - preDuration);
         translateAnimation.setInterpolator(interpolator);
@@ -202,7 +208,7 @@ public class ArcLayout extends ViewGroup {
     private void bindChildAnimation(final View child, final int index, final long duration) {
         final boolean expanded = mExpanded;
         final int centerX = getWidth() / 2;
-        final int centerY = getHeight() / 2;
+        final int centerY = getCenterY();
         final int radius = expanded ? 0 : mRadius;
 
         final int childCount = getChildCount();
@@ -247,6 +253,10 @@ public class ArcLayout extends ViewGroup {
 
         child.setAnimation(animation);
     }
+
+	private int getCenterY() {
+		return getHeight() - 150;
+	}
 
     public boolean isExpanded() {
         return mExpanded;
